@@ -1,8 +1,18 @@
 const express = require("express");
-const path = require("path");
-const PORT = process.env.PORT || 5000;
+const bodyParser = require("body-parser");
+var cors = require("cors");
+const crypto = require("crypto");
 
-express()
-  .use(express.static(path.join(__dirname, "public")))
-  .get("/", (req, res) => res.send("working"))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+const app = express();
+const port = process.env.PORT || 9000;
+
+app.use(cors());
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use("/", require("./routes/routes"));
+
+app.listen(port, () => {
+  console.log(`server is running on port: ${port}`);
+});
