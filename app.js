@@ -11,12 +11,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
-  res.send("hotblock api server");
-});
-app.get("/cool", (req, res) => {
-    res.send("cool");
-  });
+app.use("/", require("./routes/routes"));
 
 app.listen(port, () => {
   console.log(`server is running on port: ${port}`);
