@@ -1,37 +1,44 @@
 const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
+var firebase = require("firebase");
+
 var cors = require("cors");
+router.use(cors());
+router.use(bodyParser.urlencoded({ extended: false }));
+router.use(bodyParser.json());
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAvue4Nuo9hVT9ex5TGGsx0EB-fDxkATbQ",
+  authDomain: "hotblock-48cbf.firebaseapp.com",
+  databaseURL: "https://hotblock-48cbf.firebaseio.com",
+  projectId: "hotblock-48cbf",
+  storageBucket: "hotblock-48cbf.appspot.com",
+  messagingSenderId: "569044229872",
+  appId: "1:569044229872:web:2ef373868892454c286c35",
+  measurementId: "G-VS2EM66FF2",
+};
+const app = firebase.initializeApp(firebaseConfig);
+const firestor = app.firestore(app);
 
 var cron = require("node-cron");
 
 var array = [1, 2];
 
-router.use(cors());
-router.use(bodyParser.urlencoded({ extended: false }));
-router.use(bodyParser.json());
-
 router.route("/").get((req, res) => {
-  var sec = new Date().getSeconds();
-  var min = new Date().getMinutes();
-  var hour = new Date().getHours();
-  var day = new Date().getDay();
+  var task = cron.schedule(`*/30 * * * * *`, () => {
+    var aTuringRef = firestor.collection("users").add({
+      name: "Alan",
+      middle: "Mathison",
+      last: "Turing",
+      born: 1912,
+    });
 
-  const { id, name } = req.body;
-
-  var task = cron.schedule(
-    `*/${sec} * * * * *`,
-    () => {
-      var number = array.length + 1;
-      array.push(number);
-      console.log(`${sec} ${min} ${hour} ${day}`);
-      res.json({ id: id, name: name });
+    aTuringRef.then(() => {
+      console.log("job done");
       stoptask();
-    },
-    {
-      scheduled: false,
-    }
-  );
+    });
+  });
 
   function stoptask() {
     task.destroy();
@@ -39,6 +46,7 @@ router.route("/").get((req, res) => {
   }
 
   task.start();
+  res.json({ success: true });
 });
 
 router.route("/cool").get((req, res) => {
