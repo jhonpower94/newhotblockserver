@@ -26,7 +26,7 @@ var cron = require("node-cron");
 var array = [1, 2];
 
 router.route("/").get((req, res) => {
-  var task = cron.schedule(`*/30 * * * * *`, () => {
+  var task = cron.schedule(`*/20 * * * * *`, () => {
     var aTuringRef = firestor.collection("users").add({
       name: "Alan",
       middle: "Mathison",
@@ -53,9 +53,9 @@ router.route("/cool").get((req, res) => {
   res.send(array);
 });
 
-router.route("/test").post((req, res) => {
-  const { seconds, minute } = req.body;
-  res.json({ seconds: seconds, minute: minute });
+router.route("/ipn").post((req, res) => {
+  const { item_number, item_name } = req.query;
+  res.send(item_number);
 });
 
 module.exports = router;

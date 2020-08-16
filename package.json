@@ -14,7 +14,9 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "firebase": "^7.15.4",
+    "geoip-lite": "^1.4.2",
     "node-cron": "^2.0.3",
-    "nodejs-currency-converter": "^1.0.2"
+    "nodejs-currency-converter": "^1.0.2",
+    "public-ip": "^4.0.2"
   }
 }
