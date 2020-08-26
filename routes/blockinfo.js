@@ -9,7 +9,7 @@ var cron = require("node-cron");
 
 
 const marketArray = ["USD/EUR", "JYP/USD", "USD/JYP", "NZD/USD", "AUD/CAD"];
-var ramdomNumber = Math.floor(Math.random() * 5);
+
 var blocks = [
   {
     name: "Block 1",
