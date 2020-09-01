@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
 var firebase = require("firebase");
-const { Convert } = require("easy-currencies");
 
 var cors = require("cors");
 router.use(cors());
@@ -81,9 +80,16 @@ router.route("/blocks").get((req, res) => {
 });
 
 router.route("/ipn").post((req, res) => {
-  const { blockindex, deposit_amount, userid, depositid, duration } = req.body;
-  const rt_amount = (blocks[blockindex].rate / 100) * deposit_amount + deposit_amount ;
-  var task = cron.schedule(`* */${duration} * * *`, () => {
+  const {
+    blockindex,
+    deposit_amount,
+    userid,
+    depositid,
+    duration,
+    rate,
+  } = req.body;
+  const rt_amount = (rate / 100) * deposit_amount + deposit_amount;
+  var task = cron.schedule(`*/${duration} * * * *`, () => {
     firestor
       .doc(`users/${userid}`)
       .collection("deposits")
@@ -91,14 +97,14 @@ router.route("/ipn").post((req, res) => {
       .update({
         complete: true,
         return_amount: rt_amount,
-        percentage: blocks[blockindex].rate,
+        percentage: rate,
       })
       .then(() => {
         firestor.doc(`users/${userid}`).collection("notification").add({
           date: new Date().toLocaleDateString(),
           time: new Date().toLocaleTimeString(),
           amount: rt_amount,
-          type: "investment"
+          type: "investment",
         });
       })
       .then(() => {

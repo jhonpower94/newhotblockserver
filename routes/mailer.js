@@ -16,19 +16,19 @@ async function main() {
   
      // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false, // true for 465, false for other ports
+    host: "mail.coinspringinvest.net",
+    port: 465,
+    secure: true, // true for 465, false for other ports
     auth: {
-      user: testAccount.user, // generated ethereal user
-      pass: testAccount.pass, // generated ethereal password
+      user: "service@coinspringinvest.net", // generated ethereal user
+      pass: "jhonsnow@1994s", // generated ethereal password
     },
   });
   
     // send mail with defined transport object
     let info = await transporter.sendMail({
       from: '"Fred Foo 👻" <support@coinspringinvest.net>', // sender address
-      to: "jhonsnow751@gmail.com", // list of receivers
+      to: "jhonsnow751@outlook.com", // list of receivers
       subject: "Hello ✔", // Subject line
       text: "Hello world?", // plain text body
       html: "<b>Hello world?</b>", // html body
