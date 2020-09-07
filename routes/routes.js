@@ -1,7 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
+var admin = require("firebase-admin");
 var firebase = require("firebase");
+
+var serviceAccount = require("./config/serviceaccount.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://hotblock-48cbf.firebaseio.com",
+});
 
 var cors = require("cors");
 router.use(cors());
@@ -122,6 +130,19 @@ router.route("/ipn").post((req, res) => {
     blockindex: blockindex,
     deposit_amount: deposit_amount,
     userid: userid,
+  });
+});
+
+router.route("/delete").post((req, res) => {
+  const { uid } = req.body;
+  admin
+    .auth()
+    .deleteUser(uid)
+    .catch(function (error) {
+      console.log("Error deleting user", uid, error);
+    });
+  res.send({
+    uid: uid,
   });
 });
 
