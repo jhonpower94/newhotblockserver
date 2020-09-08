@@ -96,8 +96,9 @@ router.route("/ipn").post((req, res) => {
     duration,
     rate,
   } = req.body;
-  const rt_amount = (rate / 100) * deposit_amount + deposit_amount;
-  var task = cron.schedule(`* */${duration} * * *`, () => {
+  const rt_amount  =(rate / 100) * deposit_amount + deposit_amount;
+  const newduration = parseInt(duration)
+  var task = cron.schedule(`* */${newduration} * * *`, () => {
     firestor
       .doc(`users/${userid}`)
       .collection("deposits")
