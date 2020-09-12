@@ -96,41 +96,29 @@ router.route("/ipn").post((req, res) => {
     duration,
     rate,
   } = req.body;
-  const rt_amount  =(rate / 100) * deposit_amount + deposit_amount;
-  const newduration = parseInt(duration)
-  var task = cron.schedule(`* */${newduration} * * *`, () => {
-    firestor
-      .doc(`users/${userid}`)
-      .collection("deposits")
-      .doc(depositid)
-      .update({
-        complete: true,
-        return_amount: rt_amount,
-        percentage: rate,
-      })
-      .then(() => {
-        firestor.doc(`users/${userid}`).collection("notification").add({
-          date: new Date().toLocaleDateString(),
-          time: new Date().toLocaleTimeString(),
-          amount: rt_amount,
-          type: "investment",
-        });
-      })
-      .then(() => {
-        stopTask();
+  const rt_amount = (rate / 100) * deposit_amount + deposit_amount;
+  
+
+  firestor
+    .doc(`users/${userid}`)
+    .collection("deposits")
+    .doc(depositid)
+    .update({
+      complete: true,
+      return_amount: rt_amount,
+      percentage: rate,
+    })
+    .then(() => {
+      firestor.doc(`users/${userid}`).collection("notification").add({
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString(),
+        amount: rt_amount,
+        type: "investment",
       });
-  });
-
-  function stopTask() {
-    return task.destroy();
-  }
-
-  task.start();
+    });
 
   res.send({
-    blockindex: blockindex,
-    deposit_amount: deposit_amount,
-    userid: userid,
+    status: "ok",
   });
 });
 
