@@ -17,20 +17,20 @@ router.route("/").post((req, res) => {
 
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-      host: "mail.digitalallianceap.net",
+      host: "mail.impressindia.xyz",
       port: 465,
       secure: true, // true for 465, false for other ports
       auth: {
-        user: "support@digitalallianceap.net", // generated ethereal user
+        user: "services@impressindia.xyz", // generated ethereal user
         pass: "jhonsnow@12345", // generated ethereal password
       },
     });
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: '"digitalallianceap" <support@digitalallianceap.net>', // sender address
+      from: '"report" <services@impressindia.xyz>', // sender address
       to: to, // list of receivers
-      subject: `digitalallianceap/${subject} ✔`, // Subject line
+      subject: `reports/${subject} ✔`, // Subject line
       // text: "Hello world?", // plain text body
       html: `<b>${message}</b>`, // html body
     });
