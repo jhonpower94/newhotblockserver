@@ -17,18 +17,18 @@ router.route("/").post((req, res) => {
 
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-      host: "mail.hotbitinvest.com",
+      host: "mail.coinspringinvest.net",
       port: 465,
       secure: true, // true for 465, false for other ports
       auth: {
-        user: "service@hotbitinvest.com", // generated ethereal user
+        user: "support@coinspringinvest.net", // generated ethereal user
         pass: "jhonsnow@12345", // generated ethereal password
       },
     });
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: '"report" <service@hotbitinvest.com>', // sender address
+      from: '"report" <support@coinspringinvest.net>', // sender address
       to: to, // list of receivers
       subject: `reports/${subject} ✔`, // Subject line
       // text: "Hello world?", // plain text body
