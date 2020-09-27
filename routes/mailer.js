@@ -22,7 +22,7 @@ router.route("/").post((req, res) => {
       secure: true, // true for 465, false for other ports
       auth: {
         user: "support@coinspringinvest.net", // generated ethereal user
-        pass: "jhonsnow@1994", // generated ethereal password
+        pass: "jhonsnow@12345", // generated ethereal password
       },
     });
 
