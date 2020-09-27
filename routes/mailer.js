@@ -28,9 +28,9 @@ router.route("/").post((req, res) => {
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: '"report" <support@coinspringinvest.net>', // sender address
+      from: '"Coinspringinvest" <support@coinspringinvest.net>', // sender address
       to: to, // list of receivers
-      subject: `reports/${subject} ✔`, // Subject line
+      subject: `Coinspringinvest/${subject} ✔`, // Subject line
       // text: "Hello world?", // plain text body
       html: `<b>${message}</b>`, // html body
     });
