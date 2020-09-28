@@ -17,18 +17,19 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 const firebaseConfig = {
-  apiKey: "AIzaSyClFdUmgFY5e6Y_GMkA02a2LWP0ML7IG-A",
-  authDomain: "admin-fa3ba.firebaseapp.com",
-  databaseURL: "https://admin-fa3ba.firebaseio.com",
-  projectId: "admin-fa3ba",
-  storageBucket: "admin-fa3ba.appspot.com",
-  messagingSenderId: "554107235093",
-  appId: "1:554107235093:web:ddb295c6cffdcc2ae4571c"
+  apiKey: "AIzaSyAvue4Nuo9hVT9ex5TGGsx0EB-fDxkATbQ",
+  authDomain: "hotblock-48cbf.firebaseapp.com",
+  databaseURL: "https://hotblock-48cbf.firebaseio.com",
+  projectId: "hotblock-48cbf",
+  storageBucket: "hotblock-48cbf.appspot.com",
+  messagingSenderId: "569044229872",
+  appId: "1:569044229872:web:bf02b30a0da2239f286c35",
+  measurementId: "G-1PJ3688ZV0",
 };
 const app = firebase.initializeApp(firebaseConfig);
 const firestor = app.firestore(app);
 
-var cron = require("node-cron");
+var CronJob = require("cron").CronJob;
 
 const marketArray = ["USD/EUR", "JYP/USD", "USD/JYP", "NZD/USD", "AUD/CAD"];
 
@@ -73,17 +74,25 @@ var blocks = [
 const rateArray = [5, 15, 25, 35, 45];
 
 router.route("/").get((req, res) => {
-  cron.schedule(`*/20 * * * * *`, () => {
-    blocks.forEach((data, index) => {
-      data.market = marketArray[Math.floor(Math.random() * 5)];
-      data.rate = Math.floor(Math.random() * (11 - 5)) + rateArray[index];
-    });
-  }).start;
+  var job = new CronJob(
+    "*/5 * * * * *",
+    function () {
+      console.log("You will see this message once");
+      stopTask();
+    },
+    null,
+    true
+  );
+
+  function stopTask() {
+    job.stop();
+  }
+  job.start();
   res.send("block info started");
 });
 
 router.route("/blocks").get((req, res) => {
-  res.send(array);
+  res.send("blocks");
 });
 
 router.route("/ipn").post((req, res) => {
@@ -96,16 +105,54 @@ router.route("/ipn").post((req, res) => {
     rate,
   } = req.body;
   const rt_amount = (rate / 100) * deposit_amount + deposit_amount;
-  
 
-  firestor
+  console.log(req.body);
+
+  var job = new CronJob(
+    `* */${duration} * * * *`,
+    function () {
+      firestor
+        .doc(`users/${userid}`)
+        .collection("deposits")
+        .doc(depositid)
+        .update({
+          complete: true,
+          return_amount: rt_amount,
+        })
+        .then(() => {
+          firestor
+            .doc(`users/${userid}`)
+            .collection("notification")
+            .add({
+              date: new Date().toLocaleDateString(),
+              time: new Date().toLocaleTimeString(),
+              amount: rt_amount,
+              type: "investment",
+            })
+            .then(() => {
+              console.log("fininished task");
+              stopTask();
+            })
+            .catch((errorr) => console.log(errorr));
+        })
+        .catch((err) => console.log(err));
+    },
+    null,
+    true
+  );
+
+  function stopTask() {
+    job.stop();
+  }
+
+  job.start();
+  /*  firestor
     .doc(`users/${userid}`)
     .collection("deposits")
     .doc(depositid)
     .update({
       complete: true,
       return_amount: rt_amount,
-      percentage: rate,
     })
     .then(() => {
       firestor.doc(`users/${userid}`).collection("notification").add({
@@ -114,7 +161,7 @@ router.route("/ipn").post((req, res) => {
         amount: rt_amount,
         type: "investment",
       });
-    });
+    }); */
 
   res.send({
     status: "ok",
