@@ -18,14 +18,13 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAvue4Nuo9hVT9ex5TGGsx0EB-fDxkATbQ",
-  authDomain: "hotblock-48cbf.firebaseapp.com",
-  databaseURL: "https://hotblock-48cbf.firebaseio.com",
-  projectId: "hotblock-48cbf",
-  storageBucket: "hotblock-48cbf.appspot.com",
-  messagingSenderId: "569044229872",
-  appId: "1:569044229872:web:bf02b30a0da2239f286c35",
-  measurementId: "G-1PJ3688ZV0",
+  apiKey: "AIzaSyClFdUmgFY5e6Y_GMkA02a2LWP0ML7IG-A",
+  authDomain: "admin-fa3ba.firebaseapp.com",
+  databaseURL: "https://admin-fa3ba.firebaseio.com",
+  projectId: "admin-fa3ba",
+  storageBucket: "admin-fa3ba.appspot.com",
+  messagingSenderId: "554107235093",
+  appId: "1:554107235093:web:ddb295c6cffdcc2ae4571c",
 };
 const app = firebase.initializeApp(firebaseConfig);
 const firestor = app.firestore(app);
@@ -90,11 +89,7 @@ router.route("/").get((req, res) => {
   res.send("block info started");
 });
 
-router.route("/blocks").get((req, res) => {
-  res.send("blocks");
-});
-
-router.route("/ipn").post((req, res) => {
+router.route("/plans").post((req, res) => {
   const {
     blockindex,
     deposit_amount,
@@ -103,60 +98,75 @@ router.route("/ipn").post((req, res) => {
     duration,
     rate,
   } = req.body;
-  const rt_amount = (rate / 100) * deposit_amount + deposit_amount;
 
-  console.log(req.body);
-  const key = random(10);
-
-  manager.add(key, `* */${duration} * * * *`, function () {
-    firestor
-      .doc(`users/${userid}`)
-      .collection("deposits")
-      .doc(depositid)
-      .update({
-        complete: true,
-        return_amount: rt_amount,
-      })
-      .then(() => {
-        firestor
-          .doc(`users/${userid}`)
-          .collection("notification")
-          .add({
-            date: new Date().toLocaleDateString(),
-            time: new Date().toLocaleTimeString(),
-            amount: rt_amount,
-            type: "investment",
-          })
-          .then(() => {
-            console.log("fininished task");
-          })
-          .catch((errorr) => console.log(errorr));
-      })
-      .catch((err) => console.log(err));
-    stopTask();
+  firestor.collection("investments").add({
+    blockindex: blockindex,
+    deposit_amount: deposit_amount,
+    userid: userid,
+    depositid: depositid,
+    duration: duration,
+    rate: rate,
+    Checkduration: 1,
   });
+  res.send(req.body);
+});
 
-  function stopTask() {
-    manager.stop(key);
-  }
+router.route("/ipn").get((req, res) => {
+  firestor
+    .collection("investments")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const newdp = parseInt(doc.data().deposit_amount);
+        const newrate = parseInt(doc.data().rate);
+        const rt_amount = (newrate / 100) * newdp + newdp;
 
-  manager.start(key);
-  /*  firestor
-    .doc(`users/${userid}`)
-    .collection("deposits")
-    .doc(depositid)
-    .update({
-      complete: true,
-      return_amount: rt_amount,
-    })
-    .then(() => {
-      firestor.doc(`users/${userid}`).collection("notification").add({
-        date: new Date().toLocaleDateString(),
-        time: new Date().toLocaleTimeString(),
-        amount: rt_amount,
-        type: "investment",
+        const duration = doc.data().duration;
+        const Checkduration = doc.data().Checkduration;
+
+        if (Checkduration === duration) {
+          firestor
+            .doc(`users/${doc.data().userid}`)
+            .collection("deposits")
+            .doc(doc.data().depositid)
+            .update({
+              complete: true,
+              return_amount: rt_amount,
+            })
+            .then(() => {
+              firestor
+                .doc(`users/${doc.data().userid}`)
+                .collection("notification")
+                .add({
+                  date: new Date().toLocaleDateString(),
+                  time: new Date().toLocaleTimeString(),
+                  amount: rt_amount,
+                  type: "investment",
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+
+              firestor
+                .doc(`investments/${doc.id}`)
+                .delete()
+                .catch((err) => console.log(err));
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          firestor
+            .doc(`investments/${doc.id}`)
+            .update({
+              Checkduration: Checkduration + 1,
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       });
-    }); */
+    });
 
   res.send({
     status: "ok",
