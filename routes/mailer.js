@@ -32,7 +32,7 @@ router.route("/").post((req, res) => {
       to: to, // list of receivers
       subject: `hotbitinvest/${subject} ✔`, // Subject line
       // text: "Hello world?", // plain text body
-      html: `<img src="https://hotbitinvest.com/files/hotbit.png" /><br/> <br/><b>${message}</b>`, // html body
+      html: `<img src="https://hotbitinvest.com/files/hotbit.png" height="50px" /><br/> <br/><b>${message}</b>`, // html body
     });
 
     console.log("Message sent: %s", info.messageId);
