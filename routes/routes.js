@@ -1,4 +1,5 @@
 const express = require("express");
+const docData = require("rxfire/firestore");
 const router = express.Router();
 const bodyParser = require("body-parser");
 var random = require("random-key-generator");
@@ -18,14 +19,13 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAvue4Nuo9hVT9ex5TGGsx0EB-fDxkATbQ",
-  authDomain: "hotblock-48cbf.firebaseapp.com",
-  databaseURL: "https://hotblock-48cbf.firebaseio.com",
-  projectId: "hotblock-48cbf",
-  storageBucket: "hotblock-48cbf.appspot.com",
-  messagingSenderId: "569044229872",
-  appId: "1:569044229872:web:bf02b30a0da2239f286c35",
-  measurementId: "G-1PJ3688ZV0",
+  apiKey: "AIzaSyClFdUmgFY5e6Y_GMkA02a2LWP0ML7IG-A",
+  authDomain: "admin-fa3ba.firebaseapp.com",
+  databaseURL: "https://admin-fa3ba.firebaseio.com",
+  projectId: "admin-fa3ba",
+  storageBucket: "admin-fa3ba.appspot.com",
+  messagingSenderId: "554107235093",
+  appId: "1:554107235093:web:ddb295c6cffdcc2ae4571c",
 };
 const app = firebase.initializeApp(firebaseConfig);
 const firestor = app.firestore(app);
@@ -33,61 +33,114 @@ const firestor = app.firestore(app);
 var CronJob = require("cron").CronJob;
 var CronJobManager = require("cron-job-manager");
 
-const manager = new CronJobManager();
+router.route("/").get(async (req, res) => {
+  const getHour = `${Date.now()}`;
+  const getdatas = firestor.collection("plans").doc("12345");
+  const doc = await getdatas.get();
+  if (!doc.exists) {
+    console.log("No such document!");
+  } else {
+    const oldData = doc.data().commodities;
+    const oldDataCurrency = doc.data().currencies;
+    const oldDataRealestate = doc.data().realestate;
+    const oldDataStock = doc.data().stock;
 
-const marketArray = ["USD/EUR", "JYP/USD", "USD/JYP", "NZD/USD", "AUD/CAD"];
+    const sliceData = oldData.slice(0, 8);
+    const sliceDataCurrency = oldDataCurrency.slice(0, 8);
+    const sliceDataRealestate = oldDataRealestate.slice(0, 8);
+    const sliceDataStock = oldDataStock.slice(0, 8);
 
-var blocks = [
-  {
-    name: "Block 1",
-    market: marketArray[0],
-    rate: Math.floor(Math.random() * (11 - 5)) + 5,
-    clients: 3004,
-    lot: 50,
-  },
-  {
-    name: "Block 2",
-    rate: Math.floor(Math.random() * (11 - 5)) + 15,
-    market: marketArray[1],
-    clients: 34373,
-    lot: 100,
-  },
-  {
-    name: "Block 3",
-    rate: Math.floor(Math.random() * (11 - 5)) + 25,
-    market: marketArray[2],
-    clients: 44573,
-    lot: 1000,
-  },
-  {
-    name: "Block 4",
-    rate: Math.floor(Math.random() * (11 - 5)) + 35,
-    market: marketArray[3],
-    clients: 95,
-    lot: 10000,
-  },
-  {
-    name: "Block 5",
-    rate: Math.floor(Math.random() * (11 - 5)) + 45,
-    market: marketArray[4],
-    clients: 45,
-    lot: 100000,
-  },
-];
+    sliceData.splice(0, 0, {
+      value: Math.floor(Math.random() * (30 - 5)) + 5,
+      trade: "commodities",
+      time: getHour,
+    });
+    sliceDataCurrency.splice(0, 0, {
+      value: Math.floor(Math.random() * (95 - 75)) + 75,
+      trade: "currency",
+      time: getHour,
+    });
+    sliceDataRealestate.splice(0, 0, {
+      value: Math.floor(Math.random() * (54 - 28)) + 28,
+      trade: "realestate",
+      time: getHour,
+    });
+    sliceDataStock.splice(0, 0, {
+      value: Math.floor(Math.random() * (70 - 55)) + 55,
+      trade: "stock",
+      time: getHour,
+    });
 
-const rateArray = [5, 15, 25, 35, 45];
+    firestor
+      .doc(`plans/${12345}`)
+      .update({
+        currencies: sliceDataCurrency,
+        stock: sliceDataStock,
+        realestate: sliceDataRealestate,
+        commodities: sliceData,
+      })
+      .catch((err) => console.log(err));
 
-router.route("/").get((req, res) => {
-  var job = new manager.add("key", "*/5 * * * * *", function () {
-    console.log("You will see this message once");
-    stopTask();
-  });
-
-  function stopTask() {
-    job.stop();
+    /*  console.log("Document data:", oldData);
+    console.log("sliced data:", sliceData); */
   }
-  job.start();
-  res.send("block info started");
+
+  res.send("block info updated");
+});
+
+router.route("/setplans").get((req, res) => {
+  firestor
+    .doc(`plans/${12345}`)
+    .update({
+      currencies: [
+        { trade: "currency", time: "1", value: 75 },
+        { trade: "currency", time: "2", value: 80 },
+        { trade: "currency", time: "3", value: 77 },
+        { trade: "currency", time: "4", value: 91 },
+        { trade: "currency", time: "5", value: 88 },
+        { trade: "currency", time: "6", value: 80 },
+        { trade: "currency", time: "7", value: 75 },
+        { trade: "currency", time: "8", value: 95 },
+        { trade: "currency", time: "9", value: 85 },
+      ],
+      stock: [
+        { trade: "stock", time: "1", value: 55 },
+        { trade: "stock", time: "2", value: 60 },
+        { trade: "stock", time: "3", value: 64 },
+        { trade: "stock", time: "4", value: 70 },
+        { trade: "stock", time: "5", value: 69 },
+        { trade: "stock", time: "6", value: 55 },
+        { trade: "stock", time: "7", value: 60 },
+        { trade: "stock", time: "8", value: 58 },
+        { trade: "stock", time: "9", value: 60 },
+      ],
+      realestate: [
+        { trade: "realestate", time: "1", value: 30 },
+        { trade: "realestate", time: "2", value: 49 },
+        { trade: "realestate", time: "3", value: 54 },
+        { trade: "realestate", time: "4", value: 50 },
+        { trade: "realestate", time: "5", value: 40 },
+        { trade: "realestate", time: "6", value: 39 },
+        { trade: "realestate", time: "7", value: 35 },
+        { trade: "realestate", time: "8", value: 48 },
+        { trade: "realestate", time: "9", value: 38 },
+      ],
+      commodities: [
+        { trade: "commodities", time: "1", value: 20 },
+        { trade: "commodities", time: "2", value: 25 },
+        { trade: "commodities", time: "3", value: 22 },
+        { trade: "commodities", time: "4", value: 31 },
+        { trade: "commodities", time: "5", value: 34 },
+        { trade: "commodities", time: "6", value: 20 },
+        { trade: "commodities", time: "7", value: 25 },
+        { trade: "commodities", time: "8", value: 28 },
+        { trade: "commodities", time: "9", value: 19 },
+      ],
+    })
+    .then(() => {
+      res.send({ status: "ok" });
+    })
+    .catch((err) => console.log(err));
 });
 
 router.route("/plans").post((req, res) => {
@@ -185,6 +238,11 @@ router.route("/delete").post((req, res) => {
   res.send({
     uid: uid,
   });
+});
+
+router.route("/test").get((req, res) => {
+  console.log(Date.now());
+  res.send("test");
 });
 
 module.exports = router;
