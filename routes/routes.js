@@ -26,7 +26,7 @@ const firebaseConfig = {
   storageBucket: "hotblock-48cbf.appspot.com",
   messagingSenderId: "569044229872",
   appId: "1:569044229872:web:bf02b30a0da2239f286c35",
-  measurementId: "G-1PJ3688ZV0"
+  measurementId: "G-1PJ3688ZV0",
 };
 const app = firebase.initializeApp(firebaseConfig);
 const firestor = app.firestore(app);
@@ -145,6 +145,7 @@ router.route("/setplans").get((req, res) => {
 });
 
 router.route("/plans").post((req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
   const {
     blockindex,
     deposit_amount,
