@@ -10,7 +10,7 @@ var serviceAccount = require("./config/serviceaccount.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://hotblock-48cbf.firebaseio.com",
+  databaseURL: "https://admin-fa3ba.firebaseio.com",
 });
 
 var cors = require("cors");
@@ -19,14 +19,13 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAvue4Nuo9hVT9ex5TGGsx0EB-fDxkATbQ",
-  authDomain: "hotblock-48cbf.firebaseapp.com",
-  databaseURL: "https://hotblock-48cbf.firebaseio.com",
-  projectId: "hotblock-48cbf",
-  storageBucket: "hotblock-48cbf.appspot.com",
-  messagingSenderId: "569044229872",
-  appId: "1:569044229872:web:bf02b30a0da2239f286c35",
-  measurementId: "G-1PJ3688ZV0",
+  apiKey: "AIzaSyClFdUmgFY5e6Y_GMkA02a2LWP0ML7IG-A",
+  authDomain: "admin-fa3ba.firebaseapp.com",
+  databaseURL: "https://admin-fa3ba.firebaseio.com",
+  projectId: "admin-fa3ba",
+  storageBucket: "admin-fa3ba.appspot.com",
+  messagingSenderId: "554107235093",
+  appId: "1:554107235093:web:ddb295c6cffdcc2ae4571c",
 };
 const app = firebase.initializeApp(firebaseConfig);
 const firestor = app.firestore(app);
@@ -190,6 +189,19 @@ router.route("/ipn").get((req, res) => {
               return_amount: rt_amount,
             })
             .then(() => {
+              // get user wallet balance
+              firestor
+                .doc(`users/${doc.data().userid}`)
+                .get()
+                .then((data) => {
+                  const wallet = data.data().wallet_balance;
+                  const newWalleyAmount = wallet + rt_amount;
+                  firestor.doc(`users/${doc.data().userid}`).update({
+                    wallet_balance: newWalleyAmount,
+                  });
+                })
+                .catch((err) => console.log(err));
+
               firestor
                 .doc(`users/${doc.data().userid}`)
                 .collection("notification")
