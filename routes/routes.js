@@ -26,7 +26,7 @@ const firebaseConfig = {
   storageBucket: "hotblock-48cbf.appspot.com",
   messagingSenderId: "569044229872",
   appId: "1:569044229872:web:bf02b30a0da2239f286c35",
-  measurementId: "G-1PJ3688ZV0"
+  measurementId: "G-1PJ3688ZV0",
 };
 const app = firebase.initializeApp(firebaseConfig);
 const firestor = app.firestore(app);
@@ -191,7 +191,7 @@ router.route("/ipn").get((req, res) => {
             })
             .then(() => {
               // get user wallet balance
-              firestor
+              /*  firestor
                 .doc(`users/${doc.data().userid}`)
                 .get()
                 .then((data) => {
@@ -201,7 +201,7 @@ router.route("/ipn").get((req, res) => {
                     wallet_balance: newWalleyAmount,
                   });
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => console.log(err)); */
 
               firestor
                 .doc(`users/${doc.data().userid}`)
