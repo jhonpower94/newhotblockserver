@@ -28,11 +28,11 @@ router.route("/").post((req, res) => {
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: '"hotbitinvest" <service@hotbitinvest.com>', // sender address
+      from: '"Coininvest" <service@hotbitinvest.com>', // sender address
       to: to, // list of receivers
-      subject: `hotbitinvest/${subject} ✔`, // Subject line
+      subject: `Coininvest/${subject} ✔`, // Subject line
       // text: "Hello world?", // plain text body
-      html: `<img src="https://hotbitinvest.com/files/hotbit.png" height="50px" /><br/> <br/><b>${message}</b>`, // html body
+      html: `<img src="https://firebasestorage.googleapis.com/v0/b/hotblock-48cbf.appspot.com/o/images%2Fcoininvest%2Flogonew.png?alt=media&token=76223f9b-221f-44b2-82af-6299e2cbde5f" height="50px" /><br/> <br/><b>${message}</b>`, // html body
     });
 
     console.log("Message sent: %s", info.messageId);
