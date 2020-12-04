@@ -10,7 +10,7 @@ var serviceAccount = require("./config/serviceaccount.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://hotblock-48cbf.firebaseio.com",
+  databaseURL: "https://hotblockinvest.firebaseio.com",
 });
 
 var cors = require("cors");
@@ -19,14 +19,13 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAvue4Nuo9hVT9ex5TGGsx0EB-fDxkATbQ",
-  authDomain: "hotblock-48cbf.firebaseapp.com",
-  databaseURL: "https://hotblock-48cbf.firebaseio.com",
-  projectId: "hotblock-48cbf",
-  storageBucket: "hotblock-48cbf.appspot.com",
-  messagingSenderId: "569044229872",
-  appId: "1:569044229872:web:bf02b30a0da2239f286c35",
-  measurementId: "G-1PJ3688ZV0",
+  apiKey: "AIzaSyAhzbLFtj3J_ubXZmtkVH61S3aqbzHfK2Y",
+  authDomain: "hotblockinvest.firebaseapp.com",
+  databaseURL: "https://hotblockinvest.firebaseio.com",
+  projectId: "hotblockinvest",
+  storageBucket: "hotblockinvest.appspot.com",
+  messagingSenderId: "468239244770",
+  appId: "1:468239244770:web:035adf1ad39d02a9ea2dbb"
 };
 const app = firebase.initializeApp(firebaseConfig);
 const firestor = app.firestore(app);
@@ -41,44 +40,37 @@ router.route("/").get(async (req, res) => {
   if (!doc.exists) {
     console.log("No such document!");
   } else {
-    const oldData = doc.data().commodities;
-    const oldDataCurrency = doc.data().currencies;
-    const oldDataRealestate = doc.data().realestate;
-    const oldDataStock = doc.data().stock;
+    const oldDataplan1 = doc.data().plan1;
+    const oldDataplan3 = doc.data().plan3;
+    const oldDataplan2 = doc.data().plan2;
 
-    const sliceData = oldData.slice(0, 8);
-    const sliceDataCurrency = oldDataCurrency.slice(0, 8);
-    const sliceDataRealestate = oldDataRealestate.slice(0, 8);
-    const sliceDataStock = oldDataStock.slice(0, 8);
+    const sliceDataplan1 = oldDataplan1.slice(0, 8);
+    const sliceDataplan3 = oldDataplan3.slice(0, 8);
+    const sliceDataplan2 = oldDataplan2.slice(0, 8);
 
-    sliceData.splice(0, 0, {
-      value: Math.floor(Math.random() * (30 - 5)) + 5,
-      trade: "commodities",
+  
+    sliceDataplan1.splice(0, 0, {
+      value: Math.floor(Math.random() * (10 - 25)) + 25,
+      trade: "plan1",
       time: getHour,
     });
-    sliceDataCurrency.splice(0, 0, {
-      value: Math.floor(Math.random() * (95 - 75)) + 75,
-      trade: "currency",
+    sliceDataplan2.splice(0, 0, {
+      value: Math.floor(Math.random() * (35 - 50)) + 50,
+      trade: "plan2",
       time: getHour,
     });
-    sliceDataRealestate.splice(0, 0, {
-      value: Math.floor(Math.random() * (54 - 28)) + 28,
-      trade: "realestate",
-      time: getHour,
-    });
-    sliceDataStock.splice(0, 0, {
-      value: Math.floor(Math.random() * (70 - 55)) + 55,
-      trade: "stock",
+    sliceDataplan3.splice(0, 0, {
+      value: Math.floor(Math.random() * (60 - 95)) + 95,
+      trade: "plan3",
       time: getHour,
     });
 
     firestor
       .doc(`plans/${12345}`)
       .update({
-        currencies: sliceDataCurrency,
-        stock: sliceDataStock,
-        realestate: sliceDataRealestate,
-        commodities: sliceData,
+        plan1: sliceDataplan1,
+        plan2: sliceDataplan2,
+        plan3: sliceDataplan3,
       })
       .catch((err) => console.log(err));
 
@@ -93,49 +85,38 @@ router.route("/setplans").get((req, res) => {
   firestor
     .doc(`plans/${12345}`)
     .update({
-      currencies: [
-        { trade: "currency", time: "1", value: 75 },
-        { trade: "currency", time: "2", value: 80 },
-        { trade: "currency", time: "3", value: 77 },
-        { trade: "currency", time: "4", value: 91 },
-        { trade: "currency", time: "5", value: 88 },
-        { trade: "currency", time: "6", value: 80 },
-        { trade: "currency", time: "7", value: 75 },
-        { trade: "currency", time: "8", value: 95 },
-        { trade: "currency", time: "9", value: 85 },
+      plan1: [
+        { trade: "plan1", time: "1", value: 75 },
+        { trade: "plan1", time: "2", value: 80 },
+        { trade: "plan1", time: "3", value: 77 },
+        { trade: "plan1", time: "4", value: 91 },
+        { trade: "plan1", time: "5", value: 88 },
+        { trade: "plan1", time: "6", value: 80 },
+        { trade: "plan1", time: "7", value: 75 },
+        { trade: "plan1", time: "8", value: 95 },
+        { trade: "plan1", time: "9", value: 85 },
       ],
-      stock: [
-        { trade: "stock", time: "1", value: 55 },
-        { trade: "stock", time: "2", value: 60 },
-        { trade: "stock", time: "3", value: 64 },
-        { trade: "stock", time: "4", value: 70 },
-        { trade: "stock", time: "5", value: 69 },
-        { trade: "stock", time: "6", value: 55 },
-        { trade: "stock", time: "7", value: 60 },
-        { trade: "stock", time: "8", value: 58 },
-        { trade: "stock", time: "9", value: 60 },
+      plan2: [
+        { trade: "plan2", time: "1", value: 55 },
+        { trade: "plan2", time: "2", value: 60 },
+        { trade: "plan2", time: "3", value: 64 },
+        { trade: "plan2", time: "4", value: 70 },
+        { trade: "plan2", time: "5", value: 69 },
+        { trade: "plan2", time: "6", value: 55 },
+        { trade: "plan2", time: "7", value: 60 },
+        { trade: "plan2", time: "8", value: 58 },
+        { trade: "plan2", time: "9", value: 60 },
       ],
-      realestate: [
-        { trade: "realestate", time: "1", value: 30 },
-        { trade: "realestate", time: "2", value: 49 },
-        { trade: "realestate", time: "3", value: 54 },
-        { trade: "realestate", time: "4", value: 50 },
-        { trade: "realestate", time: "5", value: 40 },
-        { trade: "realestate", time: "6", value: 39 },
-        { trade: "realestate", time: "7", value: 35 },
-        { trade: "realestate", time: "8", value: 48 },
-        { trade: "realestate", time: "9", value: 38 },
-      ],
-      commodities: [
-        { trade: "commodities", time: "1", value: 20 },
-        { trade: "commodities", time: "2", value: 25 },
-        { trade: "commodities", time: "3", value: 22 },
-        { trade: "commodities", time: "4", value: 31 },
-        { trade: "commodities", time: "5", value: 34 },
-        { trade: "commodities", time: "6", value: 20 },
-        { trade: "commodities", time: "7", value: 25 },
-        { trade: "commodities", time: "8", value: 28 },
-        { trade: "commodities", time: "9", value: 19 },
+      plan3: [
+        { trade: "plan3", time: "1", value: 30 },
+        { trade: "plan3", time: "2", value: 49 },
+        { trade: "plan3", time: "3", value: 54 },
+        { trade: "plan3", time: "4", value: 50 },
+        { trade: "plan3", time: "5", value: 40 },
+        { trade: "plan3", time: "6", value: 39 },
+        { trade: "plan3", time: "7", value: 35 },
+        { trade: "plan3", time: "8", value: 48 },
+        { trade: "plan3", time: "9", value: 38 },
       ],
     })
     .then(() => {
