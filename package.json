@@ -23,6 +23,7 @@
     "express": "^4.17.1",
     "firebase": "^7.22.0",
     "firebase-admin": "^9.1.1",
+    "geoip-country": "^4.0.45",
     "geoip-lite": "^1.4.2",
     "netlify-lambda": "^2.0.1",
     "node-cron": "^2.0.3",
