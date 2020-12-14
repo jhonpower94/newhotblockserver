@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 var random = require("random-key-generator");
 var admin = require("firebase-admin");
 var firebase = require("firebase");
+var Fakerator = require("fakerator");
 
 var serviceAccount = require("./config/serviceaccount.json");
 
@@ -25,7 +26,7 @@ const firebaseConfig = {
   projectId: "hotblockinvest",
   storageBucket: "hotblockinvest.appspot.com",
   messagingSenderId: "468239244770",
-  appId: "1:468239244770:web:035adf1ad39d02a9ea2dbb"
+  appId: "1:468239244770:web:035adf1ad39d02a9ea2dbb",
 };
 const app = firebase.initializeApp(firebaseConfig);
 const firestor = app.firestore(app);
@@ -48,7 +49,6 @@ router.route("/").get(async (req, res) => {
     const sliceDataplan3 = oldDataplan3.slice(0, 8);
     const sliceDataplan2 = oldDataplan2.slice(0, 8);
 
-  
     sliceDataplan1.splice(0, 0, {
       value: Math.floor(Math.random() * (10 - 25)) + 25,
       trade: "plan1",
@@ -234,6 +234,65 @@ router.route("/delete").post((req, res) => {
   res.send({
     uid: uid,
   });
+});
+
+router.route("/fakerator").get((req, res) => {
+  const data = [
+    {
+      name: Fakerator("de-DE").names.name(),
+      amount: Fakerator().random.number(400, 5000),
+      type: "wallet deposit",
+    },
+    {
+      name: Fakerator("en-CA").names.name(),
+      amount: Fakerator().random.number(400, 5000),
+      type: "wallet deposit",
+    },
+    {
+      name: Fakerator("en-CA").names.name(),
+      amount: Fakerator().random.number(400, 5000),
+      type: "wallet deposit",
+    },
+    {
+      name: Fakerator("cs-CZ").names.name(),
+      amount: Fakerator().random.number(400, 5000),
+      type: "wallet deposit",
+    },
+    {
+      name: Fakerator("en-CA").names.name(),
+      amount: Fakerator().random.number(400, 5000),
+      type: "wallet deposit",
+    },
+    {
+      name: Fakerator("de-DE").names.name(),
+      amount: Fakerator().random.number(400, 5000),
+      type: "Deposit withdrawal",
+    },
+    {
+      name: Fakerator("fr-FR").names.name(),
+      amount: Fakerator().random.number(400, 5000),
+      type: "Deposit withdrawal",
+    },
+    {
+      name: Fakerator("Hungarian").names.name(),
+      amount: Fakerator().random.number(400, 5000),
+      type: "Deposit withdrawal",
+    },
+    {
+      name: Fakerator("it-IT").names.name(),
+      amount: Fakerator().random.number(400, 5000),
+      type: "Deposit withdrawal",
+    },
+    {
+      name: Fakerator("ru-RU").names.name(),
+      amount: Fakerator().random.number(400, 5000),
+      type: "Deposit withdrawal",
+    },
+  ];
+
+  firestor.doc("fakerator/12345").update({ data: data });
+
+  res.send("ok done");
 });
 
 router.route("/test").get((req, res) => {

@@ -21,6 +21,7 @@
     "cron-job-manager": "^2.1.4",
     "easy-currencies": "^1.4.2",
     "express": "^4.17.1",
+    "fakerator": "^0.3.2",
     "firebase": "^7.22.0",
     "firebase-admin": "^9.1.1",
     "geoip-country": "^4.0.45",
