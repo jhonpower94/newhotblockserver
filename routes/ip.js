@@ -21,8 +21,8 @@ router.route("/").get((req, res) => {
   });
 });
 
-router.route("/country").get((req, res) => {
-  var ip = "207.97.227.239";
+router.route("/country").post((req, res) => {
+  const {ip} = req.body;
   var geo = geoip.lookup(ip);
   res.send(geo);
 });
