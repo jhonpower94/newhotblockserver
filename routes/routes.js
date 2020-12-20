@@ -249,7 +249,7 @@ router.route("/fakerator").get((req, res) => {
       type: "wallet deposit",
     },
     {
-      name: Fakerator("en-CA").names.name(),
+      name: Fakerator("Hungarian").names.name(),
       amount: Fakerator().random.number(400, 5000),
       type: "wallet deposit",
     },
@@ -259,7 +259,7 @@ router.route("/fakerator").get((req, res) => {
       type: "wallet deposit",
     },
     {
-      name: Fakerator("en-CA").names.name(),
+      name: Fakerator("ru-RU").names.name(),
       amount: Fakerator().random.number(400, 5000),
       type: "wallet deposit",
     },

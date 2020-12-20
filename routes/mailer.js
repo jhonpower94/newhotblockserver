@@ -17,7 +17,7 @@ router.route("/").post((req, res) => {
 
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-      host: "mail.relianceexchange.co",
+      host: "wgh8.whogohost.com",
       port: 465,
       secure: true, // true for 465, false for other ports
       auth: {
