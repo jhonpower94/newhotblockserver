@@ -11,7 +11,7 @@ var serviceAccount = require("./config/serviceaccount.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://hotblockinvest.firebaseio.com",
+  databaseURL: "https://hotblocks-140ad.firebaseio.com",
 });
 
 var cors = require("cors");
@@ -20,13 +20,14 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAhzbLFtj3J_ubXZmtkVH61S3aqbzHfK2Y",
-  authDomain: "hotblockinvest.firebaseapp.com",
-  databaseURL: "https://hotblockinvest.firebaseio.com",
-  projectId: "hotblockinvest",
-  storageBucket: "hotblockinvest.appspot.com",
-  messagingSenderId: "468239244770",
-  appId: "1:468239244770:web:035adf1ad39d02a9ea2dbb",
+  apiKey: "AIzaSyDhAagW0f1AnjX802_SSD9cO0F2cXYi5fo",
+  authDomain: "hotblocks-140ad.firebaseapp.com",
+  databaseURL: "https://hotblocks-140ad.firebaseio.com",
+  projectId: "hotblocks-140ad",
+  storageBucket: "hotblocks-140ad.appspot.com",
+  messagingSenderId: "299970232275",
+  appId: "1:299970232275:web:2049f9a30d869f9f117926",
+  measurementId: "G-7JBZHKPHQW"
 };
 const app = firebase.initializeApp(firebaseConfig);
 const firestor = app.firestore(app);
