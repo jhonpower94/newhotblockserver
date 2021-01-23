@@ -26,6 +26,7 @@
     "firebase-admin": "^9.1.1",
     "geoip-country": "^4.0.45",
     "geoip-lite": "^1.4.2",
+    "libphonenumber-js": "^1.9.8",
     "netlify-lambda": "^2.0.1",
     "node-cron": "^2.0.3",
     "nodejs-currency-converter": "^1.0.2",
